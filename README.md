@@ -4,3 +4,4 @@ My **python** solutions to [AoC 2024](https://adventofcode.com/2024). Second yea
 # Solutions
 - Day 1
 - Day 2
+- Day 3

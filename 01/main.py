@@ -45,12 +45,12 @@ if __name__ == '__main__':
     part_a_sol = part_a(file)
     end_t = time.perf_counter()
     elapsed = end_t - init_t
-    print(f'Part A: {part_a_sol}')
-    print(f'Part A: {elapsed * 1e3:.2f} ms')
+    print(f'\033[32mPart A: {part_a_sol}')
+    print(f'Part A: {elapsed * 1e3:.2f} ms\033[0m')
 
     init_t = time.perf_counter()
     part_b_sol = part_b(file)
     end_t = time.perf_counter()
     elapsed = end_t - init_t
-    print(f'Part B: {part_b_sol}')
-    print(f'Part B: {elapsed * 1e3:.2f} ms')
+    print(f'\033[34mPart B: {part_b_sol}')
+    print(f'Part B: {elapsed * 1e3:.2f} ms\033[0m')
