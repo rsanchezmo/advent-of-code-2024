@@ -43,8 +43,8 @@ def get_unique_positions(map, orig):
         if map[row][col] == '#':
             ori = (ori + 1) % 4
             row, col, _ = prev_pos
-            row += MOVES[ori][0]
-            col += MOVES[ori][1]
+            #row += MOVES[ori][0]
+            #col += MOVES[ori][1]
 
         prev_pos = (row, col, ori)
         unique_positions.add(prev_pos[:2])
@@ -71,20 +71,20 @@ def part_b(file: str) -> int:
         row, col, ori = orig
         obs_candidate = (row + MOVES[ori][0], col + MOVES[ori][1], ori)
 
-        if not (0 <= obs_candidate[0] < len(map) and 0 <= obs_candidate[1] < len(map[0])):
+        if not (0 <= obs_candidate[0] < len(map) and 0 <= obs_candidate[1] < len(map[0])) or map[obs_candidate[0]][obs_candidate[1]] == '#':
             continue
 
         # try putting an obstacle, if the next move is a previous position
         new_ori = (ori + 1) % 4
-        new_row = row + MOVES[new_ori][0]
-        new_col = col + MOVES[new_ori][1]
+        new_row = row #+ MOVES[new_ori][0]
+        new_col = col #+ MOVES[new_ori][1]
 
         prev_pos = (new_row, new_col, new_ori)
 
         # print('Origin: ', orig, 'Obs candidate: ', obs_candidate, 'Next pos:', prev_pos)
         
         loop_poses = {orig}
-        while True: # move until finding a loop, or escaping the  initial area :)
+        while True: # move until finding a loop, or escaping the initial area :)
             row, col, ori = prev_pos
             if prev_pos in loop_poses:
                 obstructions.add(obs_candidate[:2])
@@ -101,12 +101,12 @@ def part_b(file: str) -> int:
             if map[row][col] == '#':
                 ori = (ori + 1) % 4
                 row, col, _ = prev_pos
-                row += MOVES[ori][0]
-                col += MOVES[ori][1]
+                #row += MOVES[ori][0]
+                #col += MOVES[ori][1]
 
             prev_pos = (row, col, ori)
 
-    # print(obstructions)
+    print(obstructions)
 
     return len(obstructions)
 
