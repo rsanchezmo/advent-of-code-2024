@@ -106,7 +106,7 @@ def part_b(file: str) -> int:
 
             prev_pos = (row, col, ori)
 
-    print(obstructions)
+    # print(obstructions)
 
     return len(obstructions)
 
