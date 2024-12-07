@@ -1,12 +1,5 @@
 import time
 
-MOVES = {
-    0: (-1, 0),  # up
-    1: (0, 1),   # right
-    2: (1, 0),   # down
-    3: (0, -1),  # left
-}
-
 
 def parse_input(file: str):
     with open(file, 'r') as f:
@@ -21,8 +14,6 @@ def parse_input(file: str):
         equations[int(test_value)] = values
 
     return equations
-
-
 
 
 def is_valid_eq(test, numbers, operator, accum = 0):
