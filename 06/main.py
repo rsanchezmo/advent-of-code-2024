@@ -40,7 +40,7 @@ def get_unique_positions(map, orig):
         if row < 0 or row >= len(map) or col < 0 or col >= len(map[0]):
             break
 
-        if map[row][col] == '#':
+        while map[row][col] == '#':
             ori = (ori + 1) % 4
             row, col, _ = prev_pos
             #row += MOVES[ori][0]
@@ -98,7 +98,7 @@ def part_b(file: str) -> int:
             if row < 0 or row >= len(map) or col < 0 or col >= len(map[0]):
                 break
 
-            if map[row][col] == '#':
+            while map[row][col] == '#':
                 ori = (ori + 1) % 4
                 row, col, _ = prev_pos
                 #row += MOVES[ori][0]
