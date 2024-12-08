@@ -1,4 +1,6 @@
 import time
+import copy
+
 
 MOVES = {
     0: (-1, 0),  # up
@@ -61,54 +63,53 @@ def part_a(file: str)  -> int:
     return len(unique_positions)
 
 
+
+def check_loop(grid_map, orig):
+    seen = set()
+
+    guard_pos = orig[:2]
+    guard_dir = orig[2]
+
+    while True:
+
+        guard_pos_dir = (guard_pos[0], guard_pos[1], guard_dir)
+        if guard_pos_dir in seen:
+            return True
+        
+        seen.add(guard_pos_dir)
+
+        dx, dy = MOVES[guard_dir]
+        new_row, new_col = guard_pos[0] + dx, guard_pos[1] + dy
+
+        if new_row not in range(len(grid_map)) or new_col not in range(len(grid_map[0])):
+            return False
+
+        if grid_map[new_row][new_col] == "#":
+            guard_dir = (guard_dir + 1) % 4
+            continue
+        
+        guard_pos = (new_row, new_col)
+
+
 def part_b(file: str) -> int:
     map, orig = parse_input(file)
 
-    _, unique_positions_dir = get_unique_positions(map, orig)
-    obstructions = set()
+    unique_positions, _ = get_unique_positions(map, orig)    
 
-    for orig in unique_positions_dir:
-        row, col, ori = orig
-        obs_candidate = (row + MOVES[ori][0], col + MOVES[ori][1], ori)
-
-        if not (0 <= obs_candidate[0] < len(map) and 0 <= obs_candidate[1] < len(map[0])) or map[obs_candidate[0]][obs_candidate[1]] == '#':
+    loop_count = 0
+    for pos in unique_positions:
+        if pos == orig[:2]:
             continue
-
-        # try putting an obstacle, if the next move is a previous position
-        new_ori = (ori + 1) % 4
-        new_row = row #+ MOVES[new_ori][0]
-        new_col = col #+ MOVES[new_ori][1]
-
-        prev_pos = (new_row, new_col, new_ori)
-
-        # print('Origin: ', orig, 'Obs candidate: ', obs_candidate, 'Next pos:', prev_pos)
         
-        loop_poses = {orig}
-        while True: # move until finding a loop, or escaping the initial area :)
-            row, col, ori = prev_pos
-            if prev_pos in loop_poses:
-                obstructions.add(obs_candidate[:2])
-                break
+        map_reformat = [list(line) for line in map]
+        map_copy = copy.deepcopy(map_reformat)
+        map_copy[pos[0]][pos[1]] = "#"
 
-            loop_poses.add(prev_pos)
-
-            row += MOVES[ori][0]
-            col += MOVES[ori][1]
-
-            if row < 0 or row >= len(map) or col < 0 or col >= len(map[0]):
-                break
-
-            while map[row][col] == '#':
-                ori = (ori + 1) % 4
-                row, col, _ = prev_pos
-                #row += MOVES[ori][0]
-                #col += MOVES[ori][1]
-
-            prev_pos = (row, col, ori)
-
-    print(obstructions)
-
-    return len(obstructions)
+        if check_loop(map_copy, orig):
+            loop_count += 1
+    
+    return loop_count
+    
 
 
 if __name__ == '__main__':
