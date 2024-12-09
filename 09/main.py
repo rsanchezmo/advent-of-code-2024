@@ -60,11 +60,6 @@ def part_b(file: str) -> int:
 
     while left_idx < right_idx:
         left_space = map[left_idx][1]
-
-        if left_space == 0:
-            left_idx += 1
-            continue
-
         right_blocks = map[right_idx][0]
 
         if right_blocks > left_space:
@@ -72,46 +67,45 @@ def part_b(file: str) -> int:
             left_idx += 1
             if left_idx >= right_idx:
                 left_idx = 0
-                # move to the next right block
                 right_idx -= 1
             continue
 
-        # provide the new global index
+        # append the right block to the left
         map[left_idx][-1].append(right_idx)
-        #map[right_idx][-1] = None  # I have moved it
-
         # reduce the available space in the left
         map[left_idx][1] -= right_blocks
-        # map[right_idx][1] = 0  # no more free space in the right
 
         # move to the next right block
         right_idx -= 1
+        left_idx = 0
 
 
     filesystem = ['.'] * sum([orig_map[i][0] + orig_map[i][1] for i in map.keys()])
-    global_idx = 0
+
+    init_idx = 0
     has_moved = set()
     for i in range(len(map)):
+        n_blocks = map[i][0]
+        free_space = map[i][1]
+        orig_free_space = orig_map[i][1]
+        total_space = n_blocks + orig_free_space
+        appended_files = map[i][-1]
+
         if i not in has_moved:
-            filesystem[global_idx : global_idx + orig_map[i][0]] = [str(i)] * orig_map[i][0]
-            init_idx = global_idx + orig_map[i][0]
-        else:
-            init_idx = global_idx + orig_map[i][0]  # I have moved it, it will only have appended higher indices, so we have to move the pointer with the n_blocks
+            # we should draw the blocks on the current file
+            filesystem[init_idx : init_idx + n_blocks] = [str(i)] * n_blocks
+        
+        init_idx += n_blocks  # we should account the blocks of that file
 
-        if len(map[i][-1]) > 0:
-            for appended in map[i][-1]:
-                has_moved.add(appended)
-                filesystem[init_idx : init_idx + orig_map[appended][0]] = [str(appended)] * orig_map[appended][0]
-                init_idx += orig_map[appended][0]
-            global_idx = init_idx + map[i][1]  # free spaces
-        else:
-            if i not in has_moved:
-                global_idx += orig_map[i][1] + map[i][0]  # free spaces + previous blocks
-            else:
-                global_idx += map[i][1] # previous blocks
+        if appended_files:  # if we have appended blocks
+            for appended in appended_files:
+                has_moved.add(appended)  # record the already moved blocks
+                appended_blocks = map[appended][0]
+                filesystem[init_idx : init_idx + appended_blocks] = [str(appended)] * appended_blocks
+                init_idx += appended_blocks  # we should account the blocks of that file
+            
+        init_idx += free_space  # free spaces, it may not be entirely filled
     
-    print(''.join(filesystem))
-
     checksum = sum([int(value) * i if value != '.' else 0 for i, value in enumerate(filesystem)])
     return checksum
 

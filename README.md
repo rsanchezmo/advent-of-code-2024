@@ -10,4 +10,4 @@ My **python** solutions to [AoC 2024](https://adventofcode.com/2024). Second yea
 - Day 6
 - Day 7
 - Day 8
-- Day 9 *
+- Day 9
