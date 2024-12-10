@@ -19,7 +19,6 @@ def part_a(file: str)  -> int:
     map = parse_input(file)
 
     def get_a_nine(row: int, col: int, seen: set) -> int:
-        nines = 0
         for move in MOVES:
             new_row = row + MOVES[move][0]
             new_col = col + MOVES[move][1]
@@ -32,21 +31,20 @@ def part_a(file: str)  -> int:
 
             if new_value - prev_value == 1:
                 if new_value == 9:
-                    if (new_row, new_col) not in seen:
-                        seen.add((new_row, new_col))
-                        nines += 1
+                    seen.add((new_row, new_col))
                     continue
 
-                nines += get_a_nine(new_row, new_col, seen=seen)
+                get_a_nine(new_row, new_col, seen=seen)
 
-        return nines
+        return
 
     trailheads = 0
     for row in range(len(map)):
         for col in range(len(map[row])):
             if map[row][col] == 0:
                 seen = set()
-                trailheads += get_a_nine(row=row, col=col, seen=seen)
+                get_a_nine(row=row, col=col, seen=seen)
+                trailheads += len(seen)
 
     return trailheads
 
