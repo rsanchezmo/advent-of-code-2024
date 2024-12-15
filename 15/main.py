@@ -123,23 +123,23 @@ def move_entity_part_b(entity: str, map: list, position: tuple, move: str) -> tu
     if move in ['>', '<']:
         if block_type == '[':
             new_candidate, flag = move_entity_part_b('[', map, (new_x, new_y), move)
-            if new_candidate == (new_x, new_y) or flag:
+            if flag or new_candidate == (new_x, new_y):
                 return position, True
         elif block_type == ']':
             new_candidate, flag = move_entity_part_b(']', map, (new_x, new_y), move)
-            if new_candidate == (new_x, new_y) or flag:
+            if flag or new_candidate == (new_x, new_y):
                 return position, True
     else:
     # vertical movement
         if block_type == '[':
             new_candidate_left, flag_left = move_entity_part_b('[', map, (new_x, new_y), move)
             new_candidate_right, flag_right = move_entity_part_b(']', map, (new_x+1, new_y), move)
-            if new_candidate_left == (new_x, new_y) or new_candidate_right == (new_x+1, new_y) or flag_left or flag_right:
+            if flag_left or flag_right or new_candidate_left == (new_x, new_y) or new_candidate_right == (new_x+1, new_y):
                 return position, True
         elif block_type == ']':
             new_candidate_left, flag_left = move_entity_part_b('[', map, (new_x-1, new_y), move)
             new_candidate_right, flag_right = move_entity_part_b(']', map, (new_x, new_y), move)
-            if new_candidate_left == (new_x-1, new_y) or new_candidate_right == (new_x, new_y) or flag_left or flag_right:
+            if flag_left or flag_right or new_candidate_left == (new_x-1, new_y) or new_candidate_right == (new_x, new_y):
                 return position, True
 
     map[new_y][new_x] = entity
