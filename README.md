@@ -18,3 +18,4 @@ My **python** solutions to [AoC 2024](https://adventofcode.com/2024). Second yea
 - Day 14
 - Day 15
 - Day 16
+- Day 17 (Should optimize it more, takes too long, as I am brute forcing)
